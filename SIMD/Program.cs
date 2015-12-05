@@ -24,6 +24,7 @@ namespace SIMD
             {
                 testAry[i] = rnd.Next(0x40000000);
             }
+
             sw.Stop();
             Console.WriteLine($"Test data generated in {sw.Elapsed}");
 
@@ -43,6 +44,7 @@ namespace SIMD
                     testAry[i] += addAry[j];
                 }
             }
+
             sw.Stop();
             Console.WriteLine($"Single thread basic add in {sw.Elapsed}");
 
@@ -86,6 +88,7 @@ namespace SIMD
 
                 vector.CopyTo(testAry, i);
             }
+
             sw.Stop();
             Console.WriteLine($"Single thread SIMD add in {sw.Elapsed}");
 
