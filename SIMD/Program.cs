@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-
 
 namespace SIMD
 {
@@ -18,8 +18,8 @@ namespace SIMD
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            // 2GB array contains random number less then 0x40000000
-            var testAry = new int[536870912];
+            // 1GB array contains random number less then 0x40000000
+            var testAry = new int[268435456];
             for (int i = 0; i < testAry.Length; i++)
             {
                 testAry[i] = rnd.Next(0x40000000);
@@ -65,13 +65,14 @@ namespace SIMD
 
             if (!Environment.Is64BitProcess || !Vector.IsHardwareAccelerated)
             {
-                Console.WriteLine("Please run at x64 release build");
-                return;
+                Console.WriteLine("Please run at x64 release build to enable CPU SIMD HardwareAccelerated");
+                goto GPU;
             }
 
             var SIMDIntBatchCount = Vector<int>.Count;
 
             Console.WriteLine($"SIMD int batch size: {SIMDIntBatchCount}");
+
             Console.WriteLine("Single thread SIMD add");
             sw.Restart();
             for (int i = 0; i < testAry.Length; i += SIMDIntBatchCount)
@@ -104,6 +105,17 @@ namespace SIMD
             });
             sw.Stop();
             Console.WriteLine($"Multi threads SIMD add in {sw.Elapsed}");
+
+        GPU:
+            Console.WriteLine("GPU SIMD add");
+            sw.Restart();
+            GPUAdd(testAry, testAry.Length, addAry, addAry.Length);
+
+            sw.Stop();
+            Console.WriteLine($"GPU SIMD add in {sw.Elapsed}");
         }
+
+        [DllImport("CppAMP")]
+        private static extern void GPUAdd(int[] data, int dataSize, int[] additions, int additionsCount);
     }
 }
