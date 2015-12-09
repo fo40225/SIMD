@@ -6,7 +6,7 @@
 
 using namespace concurrency;
 
-extern "C" __declspec(dllexport) void _stdcall GPUAdd(int data[], int dataSize, int additions[], int additionsCount)
+extern "C" __declspec(dllexport) void __stdcall GPUAdd(int data[], int dataSize, int additions[], int additionsCount)
 {
 	array_view<int> avData(dataSize, data);
 	array_view<int> avAdditions(additionsCount, additions);
