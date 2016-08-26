@@ -68,7 +68,6 @@ namespace SIMD
             if (!Environment.Is64BitProcess || !Vector.IsHardwareAccelerated)
             {
                 Console.WriteLine("Please run at x64 release build to enable CPU SIMD HardwareAccelerated");
-                goto GPU;
             }
 
             var SIMDIntBatchCount = Vector<int>.Count;
@@ -109,7 +108,6 @@ namespace SIMD
             sw.Stop();
             Console.WriteLine($"Multi threads SIMD add in {sw.Elapsed}");
 
-        GPU:
             Console.WriteLine("GPU SIMD add");
             sw.Restart();
             GPUAdd(testAry, testAry.Length, addAry, addAry.Length);
